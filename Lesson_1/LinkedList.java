@@ -52,6 +52,9 @@ public class LinkedList
 
         if (current.value == _value) {
             this.head = current.next;
+            if (this.head == null) {
+                this.tail = null;
+            }
             return true;
         }
 
