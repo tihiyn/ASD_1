@@ -72,6 +72,7 @@ public class DynArray<T>
             array[i] = array[i + 1];
         }
         count--;
+	array[count] = null;
 
         int mayBeSize = (int) (capacity / 1.5);
         if (count < (capacity + 2 - 1) / 2 && mayBeSize > 16) {
