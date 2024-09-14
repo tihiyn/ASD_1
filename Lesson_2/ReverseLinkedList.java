@@ -4,10 +4,10 @@ public class ReverseLinkedList {
             return;
         }
 
-        Node formTail = list.tail;
-        for (Node fromHead = list.head; formTail != fromHead.prev && fromHead != formTail; fromHead = fromHead.next) {
-            swap(fromHead, formTail);
-            formTail = formTail.prev;
+        Node fromTail = list.tail;
+        for (Node fromHead = list.head; fromTail != fromHead.prev && fromHead != fromTail; fromHead = fromHead.next) {
+            swap(fromHead, fromTail);
+            fromTail = fromTail.prev;
         }
     }
 
