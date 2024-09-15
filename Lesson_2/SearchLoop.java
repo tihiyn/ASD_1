@@ -1,25 +1,29 @@
-import java.util.HashSet;
-import java.util.Set;
-
 public class SearchLoop {
     public boolean searchLoop(LinkedList2 list) {
         if (list.head == null) {
             return false;
         }
 
-        Set<Node> set = new HashSet<>();
-        for (Node node = list.head; node != null; node = node.next) {
-            if (set.contains(node)) {
+        Node firstPointer = list.head;
+        Node secondPointer = list.head;
+        while (secondPointer != null && secondPointer.next != null) {
+            firstPointer = firstPointer.next;
+            secondPointer = secondPointer.next.next;
+
+            if (firstPointer == secondPointer) {
                 return true;
             }
-            set.add(node);
         }
-        set.clear();
-        for (Node node = list.tail; node != null; node = node.prev) {
-            if (set.contains(node)) {
+
+        firstPointer = list.tail;
+        secondPointer = list.tail;
+        while (secondPointer != null && secondPointer.prev != null) {
+            firstPointer = firstPointer.prev;
+            secondPointer = secondPointer.prev.prev;
+
+            if (firstPointer == secondPointer) {
                 return true;
             }
-            set.add(node);
         }
 
         return false;
