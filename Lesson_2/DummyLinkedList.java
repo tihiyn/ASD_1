@@ -5,26 +5,20 @@ public class DummyLinkedList {
     private Node tail;
 
     public DummyLinkedList() {
-        Node dummyHead = new Node(-1);
-        Node dummyTail = new Node(-1);
-        head = dummyHead;
-        tail = dummyTail;
+        head = new DummyNode();
+        tail = new DummyNode();
         head.next = tail;
         tail.prev = head;
     }
 
     public void addInTail(Node _item)
     {
-        Node last = tail.prev;
-        last.next = _item;
-        _item.prev = last;
-        _item.next = tail;
-        tail.prev = _item;
+        insertAfter(tail.prev, _item);
     }
 
     public Node find(int _value)
     {
-        for (Node node = head.next; node != tail; node = node.next) {
+        for (Node node = head.next; !(node instanceof DummyNode); node = node.next) {
             if (node.value == _value) {
                 return node;
             }
@@ -36,7 +30,7 @@ public class DummyLinkedList {
     public ArrayList<Node> findAll(int _value)
     {
         ArrayList<Node> nodes = new ArrayList<>();
-        for (Node node = head.next; node != tail; node = node.next) {
+        for (Node node = head.next; !(node instanceof DummyNode); node = node.next) {
             if (node.value == _value) {
                 nodes.add(node);
             }
@@ -76,7 +70,7 @@ public class DummyLinkedList {
     public int count()
     {
         int count = 0;
-        for (Node node = head.next; node != tail; node = node.next) {
+        for (Node node = head.next; !(node instanceof DummyNode); node = node.next) {
             count++;
         }
 
@@ -93,6 +87,12 @@ public class DummyLinkedList {
         _nodeToInsert.prev = _nodeAfter;
         _nodeToInsert.next = next;
         next.prev = _nodeToInsert;
+    }
+}
+
+class DummyNode extends Node {
+    public DummyNode() {
+        super(-1);
     }
 }
 
