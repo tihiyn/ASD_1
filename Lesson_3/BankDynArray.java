@@ -37,7 +37,7 @@ public class BankDynArray<T> {
 
     public void append(T itm)
     {
-        if (balance > count) {
+        if (balance >= capacity) {
             makeArray(capacity * 2);
             balance -= count;
         }
