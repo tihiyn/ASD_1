@@ -5,24 +5,16 @@ public class PostfixNotation {
             char symbol = input.pop();
             switch (symbol) {
                 case '+' -> {
-                    BigDecimal a = result.pop();
-                    BigDecimal b = result.pop();
-                    result.push(a.add(b));
+                    result.push(result.pop().add(result.pop()));
                 }
                 case '*' -> {
-                    BigDecimal a = result.pop();
-                    BigDecimal b = result.pop();
-                    result.push(a.multiply(b));
+                    result.push(result.pop().multiply(result.pop()));
                 }
                 case '-' -> {
-                    BigDecimal a = result.pop();
-                    BigDecimal b = result.pop();
-                    result.push(a.subtract(b));
+                    result.push(result.pop().subtract(result.pop()));
                 }
                 case '/' -> {
-                    BigDecimal a = result.pop();
-                    BigDecimal b = result.pop();
-                    result.push(a.divide(b, 2, RoundingMode.HALF_UP));
+                    result.push(result.pop().divide(result.pop(), 2, RoundingMode.HALF_UP));
                 }
                 case '=' -> {
                     return result.pop();
