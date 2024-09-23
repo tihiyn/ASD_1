@@ -1,18 +1,18 @@
-import java.util.Set;
+import java.util.Map;
 
 public class BalanceDifferentBracket {
     public boolean isBalanced(String str) {
         Stack<Character> bracketStack = new Stack<>();
         byte[] byteArray = str.getBytes();
-        Set<Character> open = Set.of('(', '[', '{');
+        Map<Character, Character> map = Map.of(')', '(', ']', '[', '}', '{');
 
         for (byte b: byteArray) {
-            if (open.contains((char) b)) {
+            if (map.containsValue((char) b)) {
                 bracketStack.push((char) b);
                 continue;
             }
 
-            if ((bracketStack.peek() == null || (Math.abs(b - bracketStack.peek())) > 2)) {
+            if (bracketStack.peek() == null || (bracketStack.peek() != map.get((char) b))) {
                 return false;
             }
 
