@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class AverageStack {
-    private List<Double> stack;
-    private Double sum;
+public class AverageStack<T extends Number> {
+    private List<T> stack;
+    private int sum;
 
     public AverageStack()
     {
         stack = new ArrayList<>();
-        sum = 0.0;
+        sum = 0;
     }
 
     public int size()
@@ -16,26 +16,26 @@ public class AverageStack {
         return stack.size();
     }
 
-    public Double pop()
+    public T pop()
     {
         if (stack.isEmpty()) {
             return null;
         }
 
-        Double val = stack.get(stack.size() - 1);
+        T val = stack.get(stack.size() - 1);
         stack.remove(stack.size() - 1);
-        sum -= val;
+        sum -= val.intValue();
 
         return val;
     }
 
-    public void push(Double val)
+    public void push(T val)
     {
         stack.add(val);
-        sum += val;
+        sum += val.intValue();
     }
 
-    public Double peek()
+    public T peek()
     {
         if (stack.isEmpty()) {
             return null;
@@ -44,12 +44,12 @@ public class AverageStack {
         return stack.get(stack.size() - 1);
     }
 
-    public Double average() {
+    public double average() {
         if (stack.isEmpty()) {
             return 0.0;
         }
 
-        return sum / stack.size();
+        return (double) sum / stack.size();
     }
 }
 
