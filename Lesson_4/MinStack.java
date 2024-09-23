@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class MinStack<T> {
-    private List<T> stack;
-    private Stack<T> minStack;
+public class MinStack {
+    private List<Integer> stack;
+    private Stack<Integer> minStack;
 
     public MinStack()
     {
@@ -16,17 +16,17 @@ public class MinStack<T> {
         return stack.size();
     }
 
-    public T pop()
+    public Integer pop()
     {
         if (stack.isEmpty()) {
             return null;
         }
 
-        T val = stack.get(stack.size() - 1);
+        Integer val = stack.get(stack.size() - 1);
         stack.remove(stack.size() - 1);
 
-        if (minStack.peek() != null && (int) val > (int) minStack.peek()) {
-            T tmp = minStack.pop();
+        if (minStack.peek() != null && val > minStack.peek()) {
+            Integer tmp = minStack.pop();
             minStack.pop();
             minStack.push(tmp);
         } else {
@@ -36,12 +36,12 @@ public class MinStack<T> {
         return val;
     }
 
-    public void push(T val)
+    public void push(Integer val)
     {
         stack.add(val);
 
-        if (minStack.peek() != null && (int) val > (int) minStack.peek()) {
-            T tmp = minStack.pop();
+        if (minStack.peek() != null && val > minStack.peek()) {
+            Integer tmp = minStack.pop();
             minStack.push(val);
             minStack.push(tmp);
         } else {
@@ -49,7 +49,7 @@ public class MinStack<T> {
         }
     }
 
-    public T peek()
+    public Integer peek()
     {
         if (stack.isEmpty()) {
             return null;
@@ -58,7 +58,7 @@ public class MinStack<T> {
         return stack.get(stack.size() - 1);
     }
 
-    public T minValue() {
+    public Integer minValue() {
         return minStack.peek();
     }
 }
