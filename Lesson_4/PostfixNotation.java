@@ -3,23 +3,24 @@ public class PostfixNotation {
         Stack<BigDecimal> result = new Stack<>();
         while (input.size() > 0) {
             char symbol = input.pop();
+            if (Character.isDigit(symbol)) {
+                result.push(BigDecimal.valueOf(Character.getNumericValue(symbol)));
+                continue;
+            }
+
+            BigDecimal a = result.pop();
+            BigDecimal b = result.pop();
             switch (symbol) {
-                case '+' -> {
-                    result.push(result.pop().add(result.pop()));
-                }
-                case '*' -> {
-                    result.push(result.pop().multiply(result.pop()));
-                }
-                case '-' -> {
-                    result.push(result.pop().subtract(result.pop()));
-                }
+                case '+' -> result.push(a.add(b));
+                case '*' -> result.push(a.multiply(b));
+                case '-' -> result.push(a.subtract(b));
                 case '/' -> {
-                    result.push(result.pop().divide(result.pop(), 2, RoundingMode.HALF_UP));
+                    if (b.equals(BigDecimal.ZERO)) {
+                        throw new ArithmeticException("Division by zero");
+                    }
+                    result.push(a.divide(b, 2, RoundingMode.HALF_UP));
                 }
-                case '=' -> {
-                    return result.pop();
-                }
-                default -> result.push(BigDecimal.valueOf(symbol - 48));
+                case '=' -> {return a;}
             }
         }
 
