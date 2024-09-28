@@ -12,12 +12,6 @@ public class DoubleStackQueue<T> {
     }
 
     public void enqueue(T item) {
-        int secondSize = second.size();
-        for (int i = 0; i < secondSize; i++) {
-            T e = second.pop();
-            first.push(e);
-        }
-
         first.push(item);
         size++;
     }
@@ -26,14 +20,16 @@ public class DoubleStackQueue<T> {
         if (size == 0) {
             return null;
         }
-
-        int firstSize = first.size();
-        for (int i = 0; i < firstSize; i++) {
-            T e = first.pop();
-            second.push(e);
+        
+        size--;
+        if (!second.isEmpty()) {
+            return second.pop();
         }
 
-        size--;
+        while (!first.isEmpty()) {
+            second.push(first.pop());
+        }
+
         return second.pop();
     }
 
