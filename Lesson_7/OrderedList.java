@@ -35,7 +35,11 @@ public class OrderedList<T>
             return (((String) v1).trim()).compareTo(((String) v2).trim());
         }
 
-        return BigDecimal.valueOf((double) v1).compareTo(BigDecimal.valueOf((double) v2));
+        if (v1 instanceof Number && v2 instanceof Number) {
+            return BigDecimal.valueOf(((Number) v1).doubleValue()).compareTo(BigDecimal.valueOf(((Number) v2).doubleValue()));
+        }
+
+        throw new IllegalArgumentException("Not comparable types");
     }
 
     public void add(T value)
