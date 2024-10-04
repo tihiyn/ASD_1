@@ -5,44 +5,34 @@ public class AmortizedDeque<T> {
     private int startPointer;
     private int endPointer;
     private int size;
+    private int capacity;
 
     public AmortizedDeque(Class<T> clazz) {
-        storage = new DynamicArray<>(clazz, 1);
+        capacity = 1;
+        storage = new DynamicArray<>(clazz, capacity);
         startPointer = 0;
         endPointer = 0;
         size = 0;
-    }
 
-    private void resize() {
-        DynamicArray<T> newStorage = new DynamicArray<>(storage.getTypeOfElements(), storage.getCapacity() * 2);
-
-        for (int i = 0; i < size; i++) {
-            newStorage.setItem(i, storage.getItem((startPointer + i) % storage.getCapacity()));
-        }
-
-        storage = newStorage;
-        startPointer = 0;
-        endPointer = size;
     }
 
     public void addFront(T item) {
-        if (isFull()) {
-            resize();
-        }
-
         startPointer = movePointerLeftInCycle(startPointer);
         storage.setItem(startPointer, item);
         size++;
+
+        if (capacity != storage.getCapacity()) {
+            rebootPointers();
+        }
     }
 
     public void addTail(T item) {
-        if (isFull()) {
-            resize();
-        }
-
         storage.setItem(endPointer, item);
         endPointer = movePointerRightInCycle(endPointer);
         size++;
+        if (capacity != storage.getCapacity()) {
+            rebootPointers();
+        }
     }
 
     public T removeFront() {
@@ -73,6 +63,12 @@ public class AmortizedDeque<T> {
         return (pointer + 1) % storage.getCapacity();
     }
 
+    private void rebootPointers() {
+	capacity = storage.getCapacity();
+        startPointer = capacity - 1;
+        endPointer = size - 1;
+    }
+
     public boolean isFull() {
         return size == storage.getCapacity();
     }
@@ -86,11 +82,13 @@ class DynamicArray<T> {
     private T[] storage;
     private Class<T> clazz;
     private int capacity;
+    private int size;
 
     public DynamicArray(Class<T> clazz, int initialCapacity) {
         this.clazz = clazz;
         this.capacity = initialCapacity;
         storage = (T[]) Array.newInstance(clazz, initialCapacity);
+        size = 0;
     }
 
     public DynamicArray<T> getExtendedArray(int newCapacity) {
@@ -98,10 +96,19 @@ class DynamicArray<T> {
     }
 
     public T getItem(int index) {
+        size--;
         return storage[index];
     }
 
     public void setItem(int index, T value) {
+        if (size == capacity) {
+            resize(index);
+            storage[capacity - 1] = value;
+            size++;
+            return;
+        }
+
+        size++;
         storage[index] = value;
     }
 
@@ -109,8 +116,15 @@ class DynamicArray<T> {
         return capacity;
     }
 
-    public Class<T> getTypeOfElements() {
-        return clazz;
+    public void resize(int startPointer) {
+        T[] newStorage = (T[]) Array.newInstance(clazz, capacity * 2);
+
+        for (int i = 0; i < capacity; i++) {
+            newStorage[i] = storage[(startPointer + 1 + i) % capacity];
+        }
+
+        storage = newStorage;
+        capacity *= 2;
     }
 }
 
