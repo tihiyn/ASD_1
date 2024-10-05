@@ -91,10 +91,6 @@ class DynamicArray<T> {
         size = 0;
     }
 
-    public DynamicArray<T> getExtendedArray(int newCapacity) {
-        return new DynamicArray<>(clazz, newCapacity);
-    }
-
     public T getItem(int index) {
         size--;
         return storage[index];
