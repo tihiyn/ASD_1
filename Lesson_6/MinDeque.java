@@ -30,7 +30,7 @@ public class MinDeque<T extends Number> {
         if (minDeque.getFront() != null && item.intValue() > minDeque.getFront().intValue()) {
             T tmp = minDeque.removeFront();
             minDeque.addFront(item);
-            minDeque.addFront(item);
+            minDeque.addFront(tmp);
             return;
         }
 
