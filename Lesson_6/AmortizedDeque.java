@@ -2,79 +2,33 @@ import java.lang.reflect.Array;
 
 public class AmortizedDeque<T> {
     private DynamicArray<T> storage;
-    private int startPointer;
-    private int endPointer;
-    private int size;
-    private int capacity;
 
     public AmortizedDeque(Class<T> clazz) {
-        capacity = 1;
-        storage = new DynamicArray<>(clazz, capacity);
-        startPointer = 0;
-        endPointer = 0;
-        size = 0;
-
+        storage = new DynamicArray<>(clazz, 1);
     }
 
     public void addFront(T item) {
-        startPointer = movePointerLeftInCycle(startPointer);
-        storage.setItem(startPointer, item);
-        size++;
-
-        if (capacity != storage.getCapacity()) {
-            rebootPointers();
-        }
+        storage.addItem(0, item);
     }
 
     public void addTail(T item) {
-        storage.setItem(endPointer, item);
-        endPointer = movePointerRightInCycle(endPointer);
-        size++;
-        if (capacity != storage.getCapacity()) {
-            rebootPointers();
-        }
+        storage.addItem(storage.getSize(), item);
     }
 
     public T removeFront() {
-        if (size == 0) {
+        if (storage.getSize() == 0) {
             return null;
         }
 
-        startPointer = movePointerRightInCycle(startPointer);
-        size--;
-        return storage.getItem(movePointerLeftInCycle(startPointer));
+        return storage.removeItem(0);
     }
 
     public T removeTail() {
-        if (size == 0) {
+        if (storage.getSize() == 0) {
             return null;
         }
 
-        endPointer = movePointerLeftInCycle(endPointer);
-        size--;
-        return storage.getItem(endPointer);
-    }
-
-    private int movePointerLeftInCycle(int pointer) {
-        return (pointer - 1 + storage.getCapacity()) % storage.getCapacity();
-    }
-
-    private int movePointerRightInCycle(int pointer) {
-        return (pointer + 1) % storage.getCapacity();
-    }
-
-    private void rebootPointers() {
-	capacity = storage.getCapacity();
-        startPointer = capacity - 1;
-        endPointer = size - 1;
-    }
-
-    public boolean isFull() {
-        return size == storage.getCapacity();
-    }
-
-    public int size() {
-        return size;
+        return storage.removeItem(storage.getSize() - 1);
     }
 }
 
@@ -91,36 +45,37 @@ class DynamicArray<T> {
         size = 0;
     }
 
-    public T getItem(int index) {
+    public T removeItem(int index) {
         size--;
         return storage[index];
     }
 
-    public void setItem(int index, T value) {
+    public void addItem(int index, T value) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+
         if (size == capacity) {
-            resize(index);
-            storage[capacity - 1] = value;
-            size++;
-            return;
+            resize();
         }
 
-        size++;
+        for (int i = size - 1; i >= index; i--) {
+            storage[i + 1] = storage[i];
+        }
+
         storage[index] = value;
+        size++;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void resize(int startPointer) {
-        T[] newStorage = (T[]) Array.newInstance(clazz, capacity * 2);
-
-        for (int i = 0; i < capacity; i++) {
-            newStorage[i] = storage[(startPointer + 1 + i) % capacity];
-        }
-
-        storage = newStorage;
+    private void resize() {
+        T[] oldArray = storage;
         capacity *= 2;
+        storage = (T[]) Array.newInstance(this.clazz, capacity);
+        System.arraycopy(oldArray, 0, storage, 0, size);
+    }
+
+    public int getSize() {
+        return size;
     }
 }
 
