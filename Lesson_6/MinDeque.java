@@ -15,7 +15,7 @@ public class MinDeque<T extends Number> {
         storage.add(item);
 
         if (minDeque.getTail() != null && item.intValue() > minDeque.getTail().intValue()) {
-            T tmp = minDeque.removeFront();
+            T tmp = minDeque.removeTail();
             minDeque.addTail(item);
             minDeque.addTail(tmp);
             return;
@@ -44,7 +44,12 @@ public class MinDeque<T extends Number> {
 
         T val = storage.remove(storage.size() - 1);
 
-        if (minDeque.getTail() != null && val.intValue() > minDeque.getTail().intValue()) {
+        if (val.intValue() == minDeque.getFront().intValue()) {
+            minDeque.removeFront();
+            return val;
+        }
+
+        if (val.intValue() > minDeque.getTail().intValue()) {
             T tmp = minDeque.removeTail();
             minDeque.removeTail();
             minDeque.addTail(tmp);
@@ -62,7 +67,12 @@ public class MinDeque<T extends Number> {
 
         T val = storage.remove(0);
 
-        if (minDeque.getFront() != null && val.intValue() > minDeque.getFront().intValue()) {
+        if (val.intValue() == minDeque.getTail().intValue()) {
+            minDeque.removeTail();
+            return val;
+        }
+
+        if (val.intValue() > minDeque.getFront().intValue()) {
             T tmp = minDeque.removeFront();
             minDeque.removeFront();
             minDeque.addFront(tmp);
