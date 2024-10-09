@@ -53,9 +53,20 @@ public class OrderedList<T>
             return;
         }
 
+        if (compare(value, tail.value) >= 0 == _ascending) {
+            addInTail(value);
+            return;
+        }
+
+        if (compare(value, head.value) <= 0 == _ascending) {
+            addInHead(value);
+            return;
+        }
+
+        int comparing;
         for (Node<T> node = head; node != null; node = node.next) {
-            int res = compare(value, node.value);
-            if ((_ascending && res < 0) || (!_ascending && res > 0)) {
+            comparing = compare(value, node.value);
+            if ((_ascending && comparing < 0) || (!_ascending && comparing > 0)) {
                 if (node.prev == null) {
                     newNode.next = node;
                     node.prev = newNode;
@@ -74,6 +85,20 @@ public class OrderedList<T>
         newNode.prev = tail;
         tail.next = newNode;
         tail = newNode;
+    }
+
+    private void addInTail(T val) {
+        Node<T> node = new Node<>(val);
+        tail.next = node;
+        node.prev = tail;
+        tail = node;
+    }
+
+    private void addInHead(T val) {
+        Node<T> node = new Node<>(val);
+        head.prev = node;
+        node.next = head;
+        head = node;
     }
 
     public Node<T> find(T val)
@@ -143,6 +168,10 @@ public class OrderedList<T>
             node = node.next;
         }
         return r;
+    }
+
+    public boolean is_ascending() {
+        return _ascending;
     }
 
     public void removeDuplicates() {
