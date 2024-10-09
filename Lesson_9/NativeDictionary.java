@@ -49,6 +49,10 @@ class NativeDictionary<T>
         int index = hashIndex;
 
         for (; slots[index] != null; index = (index + step) % size) {
+            if (slots[index].equals(key)) {
+                break;
+            }
+
             if ((index + step) % size == hashIndex) {
                 index = hashIndex;
                 break;
@@ -57,7 +61,6 @@ class NativeDictionary<T>
 
         slots[index] = key;
         values[index] = value;
-
     }
 
     public T get(String key)
