@@ -144,5 +144,13 @@ public class OrderedList<T>
         }
         return r;
     }
+
+    public void removeDuplicates() {
+        for (Node<T> node = head; node.next != null; node = node.next) {
+            if (node.value.equals(node.next.value)) {
+                delete(node.value);
+            }
+        }
+    }
 }
 
