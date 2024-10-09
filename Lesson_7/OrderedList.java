@@ -244,5 +244,45 @@ public class OrderedList<T>
 
         return maxElem;
     }
+
+    public Integer getIndex(T val) {
+        if (size == 0 || val == null) {
+            return null;
+        }
+
+        int comparing;
+        int begin = 0;
+        int end = size - 1;
+        Node<T> node = head;
+        Node<T> moveNode;
+
+        for (int step = (end - begin + 1) / 2; step > 0; step = (end - begin + 1) / 2) {
+            moveNode = move(node, step);
+            comparing = compare(moveNode.value, val);
+
+            if (comparing == 0) {
+                return begin + step;
+            }
+
+            if (comparing < 0 == _ascending) {
+                begin = begin + step;
+                node = moveNode;
+            }
+
+            if (comparing > 0 == _ascending) {
+                end = begin + step - 1;
+            }
+        }
+
+        return null;
+    }
+
+    private Node<T> move(Node<T> node, int step) {
+        for (int i = 0; i < step; i++) {
+            node = node.next;
+        }
+
+        return node;
+    }
 }
 
