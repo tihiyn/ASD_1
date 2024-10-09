@@ -181,5 +181,38 @@ public class OrderedList<T>
             }
         }
     }
+
+    public boolean contains(OrderedList<T> subList) {
+        if (subList == null) {
+            return true;
+        }
+
+        if (subList.size > 1 && this._ascending != subList._ascending) {
+            return false;
+        }
+
+        Node<T> secondPointer = subList.head;
+        int counter = 0;
+
+        for (Node<T> node = this.head; node != null; node = node.next) {
+            if (counter == subList.size) {
+                return true;
+            }
+
+            if (secondPointer == null) {
+                return false;
+            }
+
+            if (compare(node.value, secondPointer.value) == 0) {
+                counter++;
+                secondPointer = secondPointer.next;
+                continue;
+            }
+
+            counter = 0;
+        }
+
+        return false;
+    }
 }
 
