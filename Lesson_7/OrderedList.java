@@ -214,5 +214,35 @@ public class OrderedList<T>
 
         return false;
     }
+
+    public T maxFreqElem() {
+        if (size == 0) {
+            return null;
+        }
+
+        int maxFreq = 1;
+        int curFreq = 1;
+        T maxElem = head.value;
+
+        for (Node<T> node = head.next; node != null; node = node.next) {
+            if (compare(node.value, node.prev.value) == 0) {
+                curFreq++;
+                continue;
+            }
+
+            if (curFreq > maxFreq) {
+                maxElem = node.prev.value;
+                maxFreq = curFreq;
+            }
+
+            curFreq = 1;
+        }
+
+        if (curFreq > maxFreq) {
+            maxElem = tail.value;
+        }
+
+        return maxElem;
+    }
 }
 
