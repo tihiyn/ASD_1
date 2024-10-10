@@ -29,13 +29,14 @@ class NativeDictionary<T>
     public boolean isKey(String key)
     {
         int hashIndex = hashFun(key);
+        int index = hashIndex;
 
-        for (; slots[hashIndex] != null; hashIndex = (hashIndex + step) % size) {
-            if (slots[hashIndex].equals(key)) {
+        for (; slots[index] != null; index = (index + step) % size) {
+            if (slots[index].equals(key)) {
                 return true;
             }
 
-            if ((hashIndex + step) % size == hashIndex) {
+            if ((index + step) % size == hashIndex) {
                 return false;
             }
         }
