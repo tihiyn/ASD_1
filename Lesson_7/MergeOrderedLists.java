@@ -1,35 +1,54 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class MergeOrderedLists<T> {
-    public OrderedList<T> merge(OrderedList<T> first, OrderedList<T> second) {
-        if (first == null || second == null || first.is_ascending() != second.is_ascending()) {
+    public OrderedList<T> merge(List<OrderedList<T>> lists) {
+        if (lists.isEmpty()) {
             return null;
         }
 
-        OrderedList<T> mergeList = new OrderedList<>(first.is_ascending());
+        lists.removeIf(list -> list == null || list.size == 0);
+        if (lists.isEmpty()) {
+            return null;
+        }
+        
+        List<Node<T>> listOfCurrent = new ArrayList<>(lists.size());
+        Node<T> nodeToCompare = lists.get(0).head;
+        int generalSize = 0;
+        boolean is_asc = lists.get(0).is_ascending();
 
-        Node<T> firstPointer = first.head;
-        Node<T> secondPointer = second.head;
-        int comparing;
+        for (OrderedList<T> list: lists) {
+            listOfCurrent.add(list.head);
+            generalSize += list.size;
 
-        while (firstPointer != null && secondPointer != null) {
-            comparing = first.compare(firstPointer.value, secondPointer.value);
-
-            if (comparing >= 0 == mergeList.is_ascending()) {
-                mergeList.add(secondPointer.value);
-                secondPointer = secondPointer.next;
+            if (list.is_ascending() != is_asc) {
+                return null;
             }
 
-            if (comparing < 0 == mergeList.is_ascending()) {
-                mergeList.add(firstPointer.value);
-                firstPointer = firstPointer.next;
+            if (is_asc == list.compare(list.tail.value, nodeToCompare.value) >= 0) {
+                nodeToCompare = list.tail;
             }
         }
 
-        for (Node<T> node = firstPointer; node != null; node = node.next) {
-            mergeList.add(node.value);
-        }
+        OrderedList<T> mergeList = new OrderedList<>(is_asc);
+        Node<T> nodeToPush = nodeToCompare;
+        int index = 0;
 
-        for (Node<T> node = secondPointer; node != null; node = node.next) {
-            mergeList.add(node.value);
+        for (int i = 0; i < generalSize; i++) {
+            for (int j = 0; j < listOfCurrent.size(); j++) {
+                if (listOfCurrent.get(j) == null) {
+                    continue;
+                }
+
+                if (is_asc == mergeList.compare(nodeToPush.value, listOfCurrent.get(j).value) >= 0) {
+                    index = j;
+                    nodeToPush = listOfCurrent.get(j);
+                }
+            }
+
+            mergeList.add(nodeToPush.value);
+            listOfCurrent.set(index, nodeToPush.next);
+            nodeToPush = nodeToCompare;
         }
 
         return mergeList;
