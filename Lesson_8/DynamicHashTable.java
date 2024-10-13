@@ -29,10 +29,8 @@ public class DynamicHashTable {
         int hashIndex = hashFun(value);
         int index = hashIndex;
 
-        while (slots[index] != null) {
-            index = (index + step) % size;
-
-            if (index == hashIndex) {
+        for (; slots[index] != null; index = (index + step) % size) {
+            if ((index + step) % size == hashIndex) {
                 return -1;
             }
         }
@@ -55,17 +53,15 @@ public class DynamicHashTable {
 
     public int find(String value)
     {
-        int index = hashFun(value);
-        int initialIndex = index;
+        int hashIndex = hashFun(value);
+        int index = hashIndex;
 
-        while (slots[index] != null) {
+        for (; slots[index] != null; index = (index + step) % size) {
             if (slots[index].equals(value)) {
                 return index;
             }
 
-            index = (index + step) % size;
-
-            if (index == initialIndex) {
+            if ((index + step) % size == hashIndex) {
                 break;
             }
         }
