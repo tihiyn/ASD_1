@@ -98,8 +98,8 @@ public class PowerSet
         int hashIndex = hashFun(value);
         int index = hashIndex;
 
-        for (; storage.get(index) != null; index = (index + step) % capacity) {
-            if (storage.get(index).equals(value)) {
+        for (; ; index = (index + step) % capacity) {
+            if (value.equals(storage.get(index))) {
                 storage.set(index, null);
                 size--;
                 return true;
@@ -109,8 +109,6 @@ public class PowerSet
                 return false;
             }
         }
-
-        return false;
     }
 
     public PowerSet intersection(PowerSet set2)
@@ -171,7 +169,7 @@ public class PowerSet
         }
         
         for (String value : set2.storage) {
-            if (value != null && !this.get(value)) {
+            if (value != null && !get(value)) {
                 return false;
             }
         }
