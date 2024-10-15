@@ -69,6 +69,10 @@ public class PowerSet
 
     public boolean get(String value)
     {
+        if (value == null) {
+            return false;
+        }
+
         int hashIndex = hashFun(value);
         int index = hashIndex;
 
@@ -87,6 +91,10 @@ public class PowerSet
 
     public boolean remove(String value)
     {
+        if (value == null) {
+            return false;
+        }
+
         int hashIndex = hashFun(value);
         int index = hashIndex;
 
@@ -107,18 +115,25 @@ public class PowerSet
 
     public PowerSet intersection(PowerSet set2)
     {
+        if (set2 == null) {
+            return null;
+        }
+        
         PowerSet result = new PowerSet();
         for (String value : storage) {
             if (value != null && set2.get(value)) {
                 result.put(value);
             }
         }
-
         return result;
     }
 
     public PowerSet union(PowerSet set2)
     {
+        if (set2 == null) {
+            return null;
+        }
+        
         PowerSet result = new PowerSet();
         for (String value : storage) {
             if (value != null) {
@@ -131,45 +146,49 @@ public class PowerSet
                 result.put(value);
             }
         }
-
         return result;
     }
 
     public PowerSet difference(PowerSet set2)
     {
+        if (set2 == null) {
+            return null;
+        }
+        
         PowerSet result = new PowerSet();
         for (String value : storage) {
             if (value != null && !set2.get(value)) {
                 result.put(value);
             }
         }
-
         return result;
     }
 
     public boolean isSubset(PowerSet set2)
     {
+        if (set2 == null) {
+            return false;
+        }
+        
         for (String value : set2.storage) {
             if (value != null && !this.get(value)) {
                 return false;
             }
         }
-
         return true;
     }
 
     public boolean equals(PowerSet set2)
     {
-        if (size() != set2.size()) {
+        if (set2 == null || size() != set2.size()) {
             return false;
         }
-
+        
         for (String value : storage) {
             if (value != null && !set2.get(value)) {
                 return false;
             }
         }
-
         return true;
     }
 }
