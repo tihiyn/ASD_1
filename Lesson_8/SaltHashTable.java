@@ -1,23 +1,30 @@
 import java.util.Random;
 
 public class SaltHashTable {
-    public int size;
-    public int step;
-    public String[] slots;
-    private final int salt;
-    public collisionCounter;
+    private final int size;
+    private final int step;
+    private Slot[] slots;
+    public int collisionCounter;
+
+    private static class Slot {
+        public String value;
+        public int salt;
+
+        public Slot(String value, int salt) {
+            this.value = value;
+            this.salt = salt;
+        }
+    }
 
     public SaltHashTable(int sz, int stp) {
         size = sz;
         step = stp;
-        slots = new String[size];
-        Random random = new Random();
-        salt = random.nextInt();
+        slots = new Slot[size];
         collisionCounter = 0;
         for (int i = 0; i < size; i++) slots[i] = null;
     }
 
-    public int hashFun(String value) {
+    private int hashFun(String value, int salt) {
         int hash = salt;
 
         for (byte b : value.getBytes()) {
@@ -27,13 +34,13 @@ public class SaltHashTable {
         return Math.abs(hash) % size;
     }
 
-    public int seekSlot(String value) {
-        int hashIndex = hashFun(value);
+    private int seekSlot(String value, int salt) {
+        int hashIndex = hashFun(value, salt);
         int index = hashIndex;
 
         for (; slots[index] != null; index = (index + step) % size) {
             collisionCounter++;
-	    if ((index + step) % size == hashIndex) {
+            if ((index + step) % size == hashIndex) {
                 return -1;
             }
         }
@@ -42,27 +49,21 @@ public class SaltHashTable {
     }
 
     public int put(String value) {
-        int slotIndex = seekSlot(value);
+        int salt = new Random().nextInt();
+        int slotIndex = seekSlot(value, salt);
 
         if (slotIndex == -1) {
             return -1;
         }
 
-        slots[slotIndex] = value;
+        slots[slotIndex] = new Slot(value, salt);
         return slotIndex;
     }
 
     public int find(String value) {
-        int hashIndex = hashFun(value);
-        int index = hashIndex;
-
-        for (; slots[index] != null; index = (index + step) % size) {
-            if (slots[index].equals(value)) {
-                return index;
-            }
-
-            if ((index + step) % size == hashIndex) {
-                break;
+        for (int i = 0; i < size; i++) {
+            if (slots[i] != null && slots[i].value.equals(value)) {
+                return i;
             }
         }
 
