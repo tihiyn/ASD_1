@@ -2,14 +2,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CortesianSet<T>
+public class CartesianSet<T>
 {
     private List<T> storage;
     private final int capacity;
     private final int step;
     private int size;
 
-    public CortesianSet()
+    public CartesianSet()
     {
         capacity = 20_000;
         storage = new ArrayList<>(capacity);
@@ -71,7 +71,7 @@ public class CortesianSet<T>
         int hashIndex = hashFun(value);
         int index = hashIndex;
 
-        for (; storage.get(index) != null; index = (index + step) % capacity) {
+        for (; ; index = (index + step) % capacity) {
             if (storage.get(index).equals(value)) {
                 return true;
             }
@@ -80,8 +80,6 @@ public class CortesianSet<T>
                 return false;
             }
         }
-
-        return false;
     }
 
     public boolean remove(T value)
@@ -106,13 +104,13 @@ public class CortesianSet<T>
         }
     }
 
-    public CortesianSet<T> intersection(CortesianSet<T> set2)
+    public CartesianSet<T> intersection(CartesianSet<T> set2)
     {
         if (set2 == null) {
             return null;
         }
 
-        CortesianSet<T> result = new CortesianSet<>();
+        CartesianSet<T> result = new CartesianSet<>();
         for (T value : storage) {
             if (value != null && set2.get(value)) {
                 result.put(value);
@@ -121,13 +119,13 @@ public class CortesianSet<T>
         return result;
     }
 
-    public CortesianSet<T> union(CortesianSet<T> set2)
+    public CartesianSet<T> union(CartesianSet<T> set2)
     {
         if (set2 == null) {
             return null;
         }
 
-        CortesianSet<T> result = new CortesianSet<>();
+        CartesianSet<T> result = new CartesianSet<>();
         for (T value : storage) {
             if (value != null) {
                 result.put(value);
@@ -142,13 +140,13 @@ public class CortesianSet<T>
         return result;
     }
 
-    public CortesianSet<T> difference(CortesianSet<T> set2)
+    public CartesianSet<T> difference(CartesianSet<T> set2)
     {
         if (set2 == null) {
             return null;
         }
 
-        CortesianSet<T> result = new CortesianSet<>();
+        CartesianSet<T> result = new CartesianSet<>();
         for (T value : storage) {
             if (value != null && !set2.get(value)) {
                 result.put(value);
@@ -157,7 +155,7 @@ public class CortesianSet<T>
         return result;
     }
 
-    public boolean isSubset(CortesianSet<T> set2)
+    public boolean isSubset(CartesianSet<T> set2)
     {
         if (set2 == null) {
             return false;
@@ -171,7 +169,7 @@ public class CortesianSet<T>
         return true;
     }
 
-    public boolean equals(CortesianSet<T> set2)
+    public boolean equals(CartesianSet<T> set2)
     {
         if (set2 == null || size() != set2.size()) {
             return false;
@@ -185,8 +183,8 @@ public class CortesianSet<T>
         return true;
     }
 
-    public CortesianSet<Pair<T>> cartesianProduct(CortesianSet<T> another) {
-        CortesianSet<Pair<T>> result = new CortesianSet<>();
+    public CartesianSet<Pair<T>> cartesianProduct(CartesianSet<T> another) {
+        CartesianSet<Pair<T>> result = new CartesianSet<>();
 
         if (another == null) {
             return result;
